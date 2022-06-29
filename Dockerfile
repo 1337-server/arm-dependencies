@@ -94,7 +94,13 @@ RUN chmod +x /install_makemkv.sh && sleep 1 && \
 # clean up apt
 RUN apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ARG VERSION
+ARG BUILD_DATE
 # set metadata
-LABEL org.opencontainers.image.source=https://github.com/1337-server/arm-dependencies
+LABEL org.opencontainers.image.source=https://github.com/1337-server/arm-dependencies.git
+LABEL org.opencontainers.image.url=https://github.com/1337-server/arm-dependencies
+LABEL org.opencontainers.image.description="Base image containing all the required dependencies for the Automatic ripping machine container"
+LABEL org.opencontainers.image.documentation=https://github.com/shitwolfymakes/arm-dependencies/wiki
 LABEL org.opencontainers.image.license=MIT
-LABEL org.opencontainers.image.revision="1.0"
+LABEL org.opencontainers.image.version=$VERSION
+LABEL org.opencontainers.image.created=$BUILD_DATE
