@@ -32,8 +32,7 @@ jobs:
             -
                 name: Checkout repository
                 uses: actions/checkout@v2
-                with:
-                    path: "arm-dependencies"
+
             -
                 name: Get branch name
                 id: branch-name
@@ -86,8 +85,6 @@ jobs:
             -
                 name: Set Version number
                 run: |
-                    ls -la ./
-                    cd arm-dependencies
                     VER=$(cat VERSION)
                     echo "VERSION=$VER" >> $GITHUB_ENV
             -
