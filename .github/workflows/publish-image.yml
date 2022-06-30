@@ -45,11 +45,7 @@ jobs:
                     echo "Branch name is ${{ steps.branch-name.outputs.ref_branch }}"
                     echo "Master name is ${{ steps.branch-name.outputs.default_branch }}"
                     echo "TAG=${{ steps.branch-name.outputs.ref_branch }}" >> $GITHUB_ENV
-            -
-                name: test branch
-                run: |
-                    echo "default = ${{ steps.branch-name.outputs.is_default }}"
-                    echo "default == ${{ steps.branch-name.outputs.is_default == 'false' }}"
+
             -
                 name: Set up QEMU
                 uses: docker/setup-qemu-action@v2
@@ -112,7 +108,9 @@ jobs:
                       ${{ env.IMAGE_NAME }}:${{ env.TAG }}
                       ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
                     labels: ${{ steps.meta.outputs.labels }}
-                    build-args: BUILD_DATE=${{ env.BUILD_DATE }} , VERSION=${{ env.VERSION }}
+                    build-args:
+                      BUILD_DATE=${{ env.BUILD_DATE }}
+                      VERSION=${{ env.VERSION }}
 
             -
                 name: retag and push multiplatform images to multiple registries
