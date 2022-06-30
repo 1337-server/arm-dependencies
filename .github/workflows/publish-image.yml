@@ -86,7 +86,7 @@ jobs:
             -
                 name: Set Version number and build datetime
                 run: |
-                    VER=$(cat VERSION)
+                    VER=$(cat /VERSION)
                     TIMESTAMP=$(date -u +'%Y-%m-%d T%H:%M:%SZ')
                     echo "VERSION=$VER" >> $GITHUB_ENV
                     echo "BUILD_DATE=\"$TIMESTAMP\"" >> $GITHUB_ENV
