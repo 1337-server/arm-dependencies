@@ -47,8 +47,8 @@ jobs:
             -
                 name: test branch
                 run: |
-                    echo "default = {{ steps.branch-name.outputs.is_default }}"
-                    echo "default == {{ steps.branch-name.outputs.is_default == 'false' }}"
+                    echo "default = ${{ steps.branch-name.outputs.is_default }}"
+                    echo "default == ${{ steps.branch-name.outputs.is_default == 'false' }}"
             -
                 name: Set up QEMU
                 uses: docker/setup-qemu-action@v2
