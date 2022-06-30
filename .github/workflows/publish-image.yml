@@ -37,7 +37,10 @@ jobs:
                 name: Get branch name
                 id: branch-name
                 uses: tj-actions/branch-names@v5.1
-
+            -
+                name: Current branch name
+                run: |
+                    echo "${{ steps.branch-name.outputs.current_branch }}"
             -
                 name: Set tag for non-default branch
                 if: steps.branch-name.outputs.is_default == 'false'
