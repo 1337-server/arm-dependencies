@@ -87,6 +87,7 @@ jobs:
                 name: Set Version number
                 run: |
                     ls -la ./
+                    cd arm-dependencies
                     VER=$(cat VERSION)
                     echo "VERSION=$VER" >> $GITHUB_ENV
             -
