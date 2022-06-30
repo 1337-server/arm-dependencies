@@ -86,6 +86,7 @@ jobs:
             -
                 name: Set Version number
                 run: |
+                    ls -la ./
                     VER=$(cat VERSION)
                     echo "VERSION=$VER" >> $GITHUB_ENV
             -
