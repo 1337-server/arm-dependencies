@@ -99,7 +99,7 @@ ARG BUILD_DATE
 # set metadata
 LABEL org.opencontainers.image.source=https://github.com/1337-server/arm-dependencies.git
 LABEL org.opencontainers.image.url=https://github.com/1337-server/arm-dependencies
-LABEL org.opencontainers.image.description=Base image containing all the required dependencies for the Automatic ripping machine container
+LABEL org.opencontainers.image.description="Dependencies for Automatic ripping machine"
 LABEL org.opencontainers.image.documentation=https://raw.githubusercontent.com/1337-server/arm-dependencies/main/README.md
 LABEL org.opencontainers.image.license=MIT
 LABEL org.opencontainers.image.version=$VERSION
