@@ -84,12 +84,15 @@ jobs:
                 with:
                     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             -
-                name: Set Version number and build datetime
+                name: Set Version number
                 run: |
-                    VER=$(cat /VERSION)
-                    TIMESTAMP=$(date -u +'%Y-%m-%d T%H:%M:%SZ')
+                    VER=$(cat VERSION)
                     echo "VERSION=$VER" >> $GITHUB_ENV
-                    echo "BUILD_DATE=\"$TIMESTAMP\"" >> $GITHUB_ENV
+            -
+                name: Set build datetime
+                run: |
+                    TIMESTAMP=$(date -u +'%Y-%m-%d T%H:%M:%SZ')
+                    echo "BUILD_DATE=$TIMESTAMP" >> $GITHUB_ENV
             # Build and push Docker image with Buildx
             # https://github.com/docker/build-push-action
             -
