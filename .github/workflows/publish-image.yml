@@ -45,6 +45,11 @@ jobs:
                     echo "Branch name is ${{ steps.branch-name.outputs.ref_branch }}"
                     echo "TAG=${{ steps.branch-name.outputs.ref_branch }}" >> $GITHUB_ENV
             -
+                name: test branch
+                run: |
+                    echo "default = {{ steps.branch-name.outputs.is_default }}"
+                    echo "default == {{ steps.branch-name.outputs.is_default == 'false' }}"
+            -
                 name: Set up QEMU
                 uses: docker/setup-qemu-action@v2
                 with:
