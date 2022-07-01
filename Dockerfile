@@ -33,7 +33,9 @@ RUN install_clean \
         python3-dev \
         python3-pip \
         nano \
-        vim
+        vim \
+        # arm extra requirements
+        scons swig libzbar-dev libzbar0
 
 # add the PPAs we need, using add-ppa.sh since add-apt-repository is unavailable
 COPY ./scripts/add-ppa.sh /root/add-ppa.sh
