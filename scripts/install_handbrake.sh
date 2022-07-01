@@ -34,9 +34,10 @@ savedAptMark="$(apt-mark showmanual)"
 export PREFIX='/usr/local'
 #################################################################################################
 set -eux
-savedAptMark="$(apt-mark showmanual)"
 apt-get update
-apt-get install -y autoconf automake autopoint appstream build-essential cmake git libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libogg-dev libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool libtool-bin libturbojpeg0-dev libvorbis-dev libx264-dev libxml2-dev libvpx-dev m4 make meson nasm ninja-build patch pkg-config python tar zlib1g-dev libva-dev libdrm-dev yasm libvpx. libx264.
+apt-get install -yqq --no-install-recommends autoconf automake autopoint appstream build-essential cmake git wget libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libogg-dev libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool libtool-bin libturbojpeg0-dev libvorbis-dev libx264-dev libxml2-dev libvpx-dev m4 make meson nasm ninja-build patch pkg-config python tar zlib1g-dev libva-dev libdrm-dev yasm libvpx. libx264. \
+&& apt-get -yqq autoremove \
+&& apt-get clean
 rm -rf /var/lib/apt/lists/*
 wget -O handbrake.tar.bz2.sig "https://github.com/HandBrake/HandBrake/releases/download/$HANDBRAKE_VERSION/HandBrake-$HANDBRAKE_VERSION-source.tar.bz2.sig"
 wget -O handbrake.tar.bz2 "https://github.com/HandBrake/HandBrake/releases/download/$HANDBRAKE_VERSION/HandBrake-$HANDBRAKE_VERSION-source.tar.bz2"
@@ -60,3 +61,4 @@ make -C build -j "$nproc"
 make -C build install
 cd /
 rm -rf /tmp/handbrake
+apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
