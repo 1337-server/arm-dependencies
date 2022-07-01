@@ -106,7 +106,7 @@ COPY --from=build /usr/local/lib/ /usr/local/lib/
 # Container healthcheck
 COPY scripts/healthcheck.sh /healthcheck.sh
 RUN chmod +x /healthcheck.sh
-HEALTHCHECK --interval=10s --timeout=5s --start-period=15s CMD /healthcheck.sh
+HEALTHCHECK --interval=5m --timeout=15s --start-period=30s CMD /healthcheck.sh
 
 ARG VERSION
 ARG BUILD_DATE
