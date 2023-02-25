@@ -66,12 +66,14 @@ RUN install_clean \
         glyrc \
         default-jre-headless \
         libavcodec-extra \
-        lsdvd
-
-# install libdvd-pkg
-RUN \
-    install_clean libdvd-pkg && \
-    dpkg-reconfigure libdvd-pkg
+        lsdvd libtool &&\
+    # install python reqs \
+    git clone https://code.videolan.org/videolan/libdvdcss && \
+    cd libdvdcss && aclocal && autoreconf -i && \
+    ./configure && \
+    make -j32 && \
+    make install && \
+    cd .. && rm -R libdvdcss
 
 # install python reqs
 COPY requirements.txt ./requirements.txt
