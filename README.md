@@ -1,6 +1,6 @@
 # arm-dependencies
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/automatic-ripping-machine/arm-dependencies/publish-image)](https://github.com/automatic-ripping-machine/arm-dependencies/actions/workflows/publish-image.yml)
+[![Deploy Docker Image](https://github.com/automatic-ripping-machine/arm-dependencies/actions/workflows/deploy-docker.yml/badge.svg)](https://github.com/automatic-ripping-machine/arm-dependencies/actions/workflows/deploy-docker.yml)
 [![Docker](https://img.shields.io/docker/pulls/automaticrippingmachine/arm-dependencies.svg)](https://hub.docker.com/r/automaticrippingmachine/arm-dependencies)
 
 [![GitHub license](https://img.shields.io/github/license/automatic-ripping-machine/arm-dependencies)](https://github.com/automatic-ripping-machine/arm-dependencies/blob/main/LICENSE)
@@ -39,10 +39,4 @@ To base your docker container on `arm-dependencies`, add this to the top of your
 ```dockerfile
 
 FROM automaticrippingmachine/arm-dependencies AS base
-```
-
-To start the rsyslog service included in this container, add the following command before the command to run `armui.py` in your `Dockerfile`:
-```dockerfile
-CMD service rsyslog start
-
 ```

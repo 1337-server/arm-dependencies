@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Setup taken from https://github.com/tianon/dockerfiles/blob/master/handbrake/Dockerfile
 # The Expat/MIT License
 #
@@ -19,27 +20,23 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
-apkArch="$(dpkg --print-architecture)"
-# curl --silent 'https://github.com/automatic-ripping-machine/automatic-ripping-machine/releases' | grep automatic-ripping-machine/tree/* | head -n 1 | sed -e 's/[^0-9\.]*//g'
-# https://github.com/HandBrake/HandBrake/releases
+
+echo -e "${RED}Finding current HandBrake version${NC}"
 HANDBRAKE_VERSION=$(curl --silent 'https://github.com/HandBrake/HandBrake/releases' | grep 'HandBrake/tree/*' | head -n 1 | sed -e 's/[^0-9\.]*//g')
-sleep 1
-set -ex
-export PREFIX='/usr/local'
-apt-get update && apt-get upgrade -yqq
-# If we're not arm64 install standard HandBrakeCLI and exit cleanly
-if [ ! "$apkArch" = "amd64" ]; then
-  echo "Running on arm - using apt for HandBrakeCLI"
-  apt install -yqq handbrake-cli
-  cp /usr/bin/HandBrakeCLI /usr/local/bin/HandBrakeCLI
-  exit 0
+echo -e "${RED}Downloading HandBrake $HANDBRAKE_VERSION${NC}"
+
+# if architecture is any flavor of arm, install standard HandBrakeCLI and exit cleanly
+if [[ $(dpkg --print-architecture) =~ arm.* ]]; then
+    echo "Running on arm - using apt for HandBrakeCLI"
+    exit 0
 fi
-#################################################################################################
+
 set -eux
 wget -O handbrake.tar.bz2.sig "https://github.com/HandBrake/HandBrake/releases/download/$HANDBRAKE_VERSION/HandBrake-$HANDBRAKE_VERSION-source.tar.bz2.sig"
 wget -O handbrake.tar.bz2 "https://github.com/HandBrake/HandBrake/releases/download/$HANDBRAKE_VERSION/HandBrake-$HANDBRAKE_VERSION-source.tar.bz2"
+
 # https://handbrake.fr/openpgp.php or https://github.com/HandBrake/HandBrake/wiki/OpenPGP
-GNUPGHOME="$(mktemp -d)"; export GNUPGHOME; \
+GNUPGHOME="$(mktemp -d)" && export GNUPGHOME
 gpg --batch --keyserver keyserver.ubuntu.com --recv-keys '1629 C061 B3DD E7EB 4AE3  4B81 021D B8B4 4E4A 8645'; \
 gpg --batch --verify handbrake.tar.bz2.sig handbrake.tar.bz2; \
 rm -rf "$GNUPGHOME" handbrake.tar.bz2.sig
@@ -50,10 +47,13 @@ tar --extract \
 	--strip-components 1 \
 	"HandBrake-$HANDBRAKE_VERSION"
 rm handbrake.tar.bz2
+
+# build
 cd /tmp/handbrake
 nproc="$(nproc)"
 ./configure --disable-gtk --enable-qsv --enable-vce --launch-jobs="$nproc" --launch
 make -C build -j "$nproc"
 make -C build install
+cp /usr/local/bin/HandBrakeCLI /usr/bin/HandBrakeCLI
 cd /
 rm -rf /tmp/handbrake

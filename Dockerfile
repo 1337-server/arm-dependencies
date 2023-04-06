@@ -1,6 +1,6 @@
 ###########################################################
 # base image, used for build stages and final images
-FROM phusion/baseimage:focal-1.2.0 as base
+FROM phusion/baseimage:focal-1.2.0 AS base
 RUN mkdir /opt/arm
 WORKDIR /opt/arm
 
@@ -35,8 +35,7 @@ RUN install_clean \
         nano \
         vim \
         # arm extra requirements
-        scons swig libzbar-dev libzbar0 \
-        handbrake-cli
+        scons swig libzbar-dev libzbar0
 
 # add the PPAs we need, using add-ppa.sh since add-apt-repository is unavailable
 COPY ./scripts/add-ppa.sh /root/add-ppa.sh
@@ -44,7 +43,7 @@ RUN bash /root/add-ppa.sh ppa:mc3man/focal6
 
 ###########################################################
 # install deps specific to the docker deployment
-FROM base as deps-docker
+FROM base AS deps-docker
 RUN install_clean gosu
 
 VOLUME /home/arm/Music
@@ -55,7 +54,7 @@ VOLUME /etc/arm/config
 
 ###########################################################
 # install deps for ripper
-FROM deps-docker as deps-ripper
+FROM deps-docker AS deps-ripper
 RUN install_clean \
         abcde \
         eyed3 \
@@ -66,28 +65,39 @@ RUN install_clean \
         flac \
         glyrc \
         default-jre-headless \
-        libavcodec-extra
+        id3 \
+        id3v2 \
+        lame \
+        libavcodec-extra \
+        lsdvd
 
-# install python reqs
-COPY requirements.txt /requirements.txt
-RUN \
-    pip3 install --upgrade pip wheel setuptools psutil pyudev && \
-    pip3 install --ignore-installed --prefer-binary -r /requirements.txt
 # install libdvd-pkg
 RUN \
     install_clean libdvd-pkg && \
     dpkg-reconfigure libdvd-pkg
 
+# install python reqs
+COPY requirements.txt ./requirements.txt
+RUN pip3 install --upgrade pip wheel setuptools psutil pyudev
+RUN pip3 install --ignore-installed --prefer-binary -r ./requirements.txt
+
+
+###########################################################
 # install makemkv and handbrake
-#RUN apt update && install_clean handbrake-cli
-#COPY ./scripts/install_handbrake.sh /install_handbrake.sh
-#RUN chmod +x /install_handbrake.sh && sleep 1 && \
-#    /install_handbrake.sh
+FROM deps-ripper AS install-makemkv-handbrake
+COPY ./scripts/install_mkv_hb_deps.sh /install_mkv_hb_deps.sh
+RUN chmod +x /install_mkv_hb_deps.sh && sleep 1 && \
+    /install_mkv_hb_deps.sh
+
+COPY ./scripts/install_handbrake.sh /install_handbrake.sh
+RUN chmod +x /install_handbrake.sh && sleep 1 && \
+    /install_handbrake.sh
 
 # MakeMKV setup by https://github.com/tianon
 COPY ./scripts/install_makemkv.sh /install_makemkv.sh
 RUN chmod +x /install_makemkv.sh && sleep 1 && \
     /install_makemkv.sh
+
 # clean up apt
 RUN apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -99,10 +109,10 @@ HEALTHCHECK --interval=5m --timeout=15s --start-period=30s CMD /healthcheck.sh
 ARG VERSION
 ARG BUILD_DATE
 # set metadata
-LABEL org.opencontainers.image.source=https://github.com/1337-server/arm-dependencies.git
-LABEL org.opencontainers.image.url=https://github.com/1337-server/arm-dependencies
-LABEL org.opencontainers.image.description="Dependencies for Automatic ripping machine"
-LABEL org.opencontainers.image.documentation=https://raw.githubusercontent.com/1337-server/arm-dependencies/main/README.md
+LABEL org.opencontainers.image.source=https://github.com/automatic-ripping-machine/arm-dependencies.git
+LABEL org.opencontainers.image.url=https://github.com/automatic-ripping-machine/arm-dependencies
+LABEL org.opencontainers.image.description="Dependencies for Automatic Ripping Machine"
+LABEL org.opencontainers.image.documentation=https://raw.githubusercontent.com/automatic-ripping-machine/arm-dependencies/main/README.md
 LABEL org.opencontainers.image.license=MIT
 LABEL org.opencontainers.image.version=$VERSION
 LABEL org.opencontainers.image.created=$BUILD_DATE
