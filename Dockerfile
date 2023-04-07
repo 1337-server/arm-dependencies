@@ -79,7 +79,7 @@ RUN \
 # install python reqs
 COPY requirements.txt ./requirements.txt
 RUN pip3 install --upgrade pip wheel setuptools psutil pyudev
-RUN python -m pip install --no-use-pep517 bcrypt
+RUN python3 -m pip install --no-use-pep517 bcrypt
 RUN pip3 install --ignore-installed --prefer-binary -r ./requirements.txt
 
 
