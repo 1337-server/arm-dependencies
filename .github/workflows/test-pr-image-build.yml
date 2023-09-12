@@ -31,7 +31,7 @@ jobs:
         -
             name: Build amd64 Docker image
             id: build-amd64
-            uses: docker/build-push-action@v4
+            uses: docker/build-push-action@v5
             with:
                 push: false
                 context: .
@@ -42,7 +42,7 @@ jobs:
         -
             name: Build arm64 Docker image
             id: build-arm64
-            uses: docker/build-push-action@v4
+            uses: docker/build-push-action@v5
             with:
                 push: false
                 context: .
@@ -53,7 +53,7 @@ jobs:
         -
             name: Build arm64v7 Docker image
             id: build-arm64v7
-            uses: docker/build-push-action@v4
+            uses: docker/build-push-action@v5
             with:
                 push: false
                 context: .
