@@ -42,3 +42,4 @@ wcwidth==0.2.6
 Werkzeug==2.3.6
 WTForms==3.0.1
 xmltodict==0.13.0
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
